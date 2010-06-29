@@ -9,7 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100629170725) do
+ActiveRecord::Schema.define(:version => 20100629175856) do
+
+  create_table "cities", :force => true do |t|
+    t.integer  "owner_id",    :null => false
+    t.string   "name",        :null => false
+    t.integer  "free_space",  :null => false
+    t.integer  "total_space", :null => false
+    t.integer  "budget",      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false

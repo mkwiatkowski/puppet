@@ -9,4 +9,5 @@ gem 'haml', '3.0.13'
 
 group :test do
   gem 'rspec-rails', '2.0.0.beta.14.2'
+  gem 'factory_girl_rails', '1.0'
 end
