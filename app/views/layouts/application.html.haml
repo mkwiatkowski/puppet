@@ -1,0 +1,12 @@
+!!! Strict
+%html{:xmlns => 'http://www.w3.org/1999/xhtml', 'xml:lang' => 'en', :lang => 'en'}
+  %head
+    %meta{"http-equiv" => "Content-Type", "content" => "text/html;charset=utf-8"}/
+    %title Puppet
+    = stylesheet_link_tag :all
+    = csrf_meta_tag
+  %body
+    %p.navigation= render 'layouts/navigation'
+    %p.notice= notice
+    %p.alert= alert
+    = yield
