@@ -42,9 +42,9 @@ describe CitiesController do
           response.should redirect_to(city_path(@city))
         end
 
-        it "should show an error flash" do
+        it "should show an alert flash" do
           post 'manage', @params
-          flash[:error].should == "Unknown action"
+          flash[:alert].should == "Unknown action"
         end
       end
 
@@ -60,7 +60,8 @@ describe CitiesController do
 
         it "should build a house" do
           assign_city(@city)
-          @city.should_receive(:build_house!)
+          Command.should_receive(:handle!).with("build_house", :city => @city).
+            and_return(stub("command", :message => ""))
           post 'manage', @params
         end
 

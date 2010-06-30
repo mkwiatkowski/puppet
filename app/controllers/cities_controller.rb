@@ -24,15 +24,10 @@ class CitiesController < ApplicationController
 
   def manage
     begin
-      case params[:command]
-      when "build_house" then
-        @city.build_house!
-        flash[:notice] = "House built"
-      else
-        raise UserActionError.new("Unknown action")
-      end
+      command = Command.handle!(params[:command], :city => @city)
+      flash[:notice] = command.message
     rescue UserActionError => error
-      flash[:error] = error.message
+      flash[:alert] = error.message
     end
     redirect_to city_path(@city)
   end
