@@ -1,0 +1,5 @@
+= form_for @city do |f|
+  = f.label :name, "Name"
+  = f.error_message_on :name
+  = f.text_field :name
+  = f.submit "Create"

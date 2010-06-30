@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe HomeController do
+  include Devise::TestHelpers
+
   describe "GET 'index'" do
     it "should be successful" do
       get 'index'

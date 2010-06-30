@@ -1,7 +1,10 @@
 Puppet::Application.routes.draw do |map|
-  devise_for :users
+  resources :cities, :only => [:new, :create, :show, :index]
 
   get "home/index"
+
+  devise_for :users
+
   root :to => "home#index"
 
   # The priority is based upon order of creation:
