@@ -9,3 +9,12 @@
   = @city.free_space
   \/
   = @city.total_space
+
+%p
+  - if @city.free_space.zero?
+    You can't build more houses in this city. There's no space left!
+  - else
+    You can build a house. It costs $200 and occupies one space.
+    = form_tag manage_city_path(@city) do
+      = hidden_field_tag "command", "build_house"
+      = submit_tag "Build now"

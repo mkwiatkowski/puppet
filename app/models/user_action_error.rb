@@ -1,0 +1,2 @@
+class UserActionError < Exception
+end

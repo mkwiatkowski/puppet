@@ -1,5 +1,9 @@
 Puppet::Application.routes.draw do |map|
-  resources :cities, :only => [:new, :create, :show, :index]
+  resources :cities, :only => [:new, :create, :show, :index] do
+    member do
+      post :manage
+    end
+  end
 
   get "home/index"
 
