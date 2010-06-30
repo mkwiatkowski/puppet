@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe City do
+  def try_building_house(city)
+    lambda {
+      begin
+        city.build_house!
+      rescue UserActionError
+        nil
+      end
+    }
+  end
+
   it "should require a name" do
     Factory.build(:city, :name => nil).should_not be_valid
   end
@@ -43,6 +53,22 @@ describe City do
     end
   end
 
+  describe "without enough budget" do
+    before do
+      @city = Factory(:city, :budget => 100)
+      @city.budget.should < 200
+    end
+
+    it "should not be able to build a house" do
+      lambda { @city.build_house! }.should raise_error(UserActionError,
+        "not enough money to build a house")
+    end
+
+    it "should not lower the budget after trying to build a house" do
+      try_building_house(@city).should_not change(@city, :budget)
+    end
+  end
+
   describe "without any free space" do
     before do
       @city = Factory(:city, :free_space => 0)
@@ -55,13 +81,7 @@ describe City do
     end
 
     it "should not lower the free space after trying to build a house" do
-      lambda {
-        begin
-          @city.build_house!
-        rescue UserActionError
-          nil
-        end
-      }.should_not change(@city, :free_space)
+      try_building_house(@city).should_not change(@city, :free_space)
     end
   end
 end

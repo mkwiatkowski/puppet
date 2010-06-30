@@ -9,6 +9,7 @@ class City < ActiveRecord::Base
 
   def build_house!
     raise UserActionError.new("not enough space to build a house") if free_space.zero?
+    raise UserActionError.new("not enough money to build a house") if budget < 200
     self.decrement!(:budget, 200)
     self.decrement!(:free_space)
   end
