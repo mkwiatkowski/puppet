@@ -18,7 +18,7 @@ class Command
     returning(self.get(name)) { |command| command.handle!(params) }
   end
 
-  def initialize(name, options, &body)
+  def initialize(name, options)
     @name = name
     @args = options[:context] || []
     @preconditions = options[:pre] || []
