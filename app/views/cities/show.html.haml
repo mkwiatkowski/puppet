@@ -16,7 +16,7 @@
     %li= building.name
 
 %h3 Actions
-- for command in CityRules.all
+- for command in CityCommands.all
   - if command.available?(:city => @city)
     = form_tag manage_city_path(@city) do
       = hidden_field_tag "command", command.name

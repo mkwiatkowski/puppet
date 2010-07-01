@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe CityRules do
+describe CityCommands do
   def build_house!
-    CityRules.handle!("build_house", :city => @city)
+    CityCommands.handle!("build_house", :city => @city)
   end
 
   def house_building_ignoring_errors

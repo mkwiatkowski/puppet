@@ -1,4 +1,4 @@
-class CityRules < Command
+class CityCommands < Command
   # Define a command that will initiate construction of a building with given
   # +name+. Resources needed for the construction should be passed via
   # :required_money and :required_space parameters.

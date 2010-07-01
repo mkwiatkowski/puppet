@@ -1,7 +1,7 @@
 # Commands subsystem that allows to keep game rules separte from the application
 # code.
-# Define rules by subclassing Command and calling define_command.
-# Invoke rules through Command.handle!.
+# Define new commands by subclassing Command and calling define_command.
+# Invoke those commands through Command.handle!.
 class Command
   attr_reader :name, :message, :label
 
