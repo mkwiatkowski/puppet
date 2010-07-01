@@ -33,13 +33,14 @@ class CityCommands < Command
       :label => "build a #{name}"
   end
 
+  TAX_RATE = 0.05
+
   # Progress game by a single step. Should be called by cron in regular
   # time intervals.
   def self.tick!
     City.all.each do |city|
-      unless city.is_full?
-        city.increment!(:population)
-      end
+      city.increment!(:population) unless city.is_full?
+      city.increment!(:budget, (city.population * TAX_RATE).round)
     end
   end
 
