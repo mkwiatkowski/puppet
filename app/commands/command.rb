@@ -12,12 +12,14 @@ class Command
   #   :context: List of parameters that command and each precondition takes.
   #     Client code is responsible for passing a proper set of parameters
   #     to handle!
-  #   :pre: List of preconditions. Precondition may either be a method defined
-  #     on the Command subclass or a Proc. A precondition should return nil
-  #     if it is true or an error message (String) in other cases.
+  #   :pre: List of preconditions. Precondition may either be a name of
+  #     a method defined on the Command subclass or a Proc. A precondition
+  #     should return nil if it is true or an error message (String) in
+  #     other cases.
   #   :label: Description of the command that will be visible in the user interface.
   #   :message: Message to be shown to the user after a successful execution of the command.
-  #   :command: Name of the method to be executed if all preconditions are true.
+  #   :commands: List of commands to be executed if all preconditions are true.
+  #     Each command may either be a method name or a Proc.
   def self.define_command(name, options)
     @@known_commands[name] = new(name, options)
   end
@@ -37,9 +39,9 @@ class Command
     @name = name
     @args = options[:context] || []
     @preconditions = options[:pre] || []
+    @commands = options[:commands] || []
     @label = options[:label]
     @message = options[:message]
-    @command = options[:command]
   end
 
   # Returns true if the command can be executed (i.e. all preconditions are true).
@@ -76,7 +78,11 @@ class Command
     end
 
     def execute!(params)
-      apply(@command, params)
+      ActiveRecord::Base.transaction do
+        for command in @commands
+          apply(command, params)
+        end
+      end
     end
 
     # Apply a precondition to given params. A precondition can be either
