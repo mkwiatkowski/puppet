@@ -12,9 +12,9 @@ class Command
   #   :context: List of parameters that command and each precondition takes.
   #     Client code is responsible for passing a proper set of parameters
   #     to handle!
-  #   :pre: List of preconditions' names, which should be methods defined
-  #     on the Command subclass. A precondition should return nil if it
-  #     is true or an error message in other cases.
+  #   :pre: List of preconditions. Precondition may either be a method defined
+  #     on the Command subclass or a Proc. A precondition should return nil
+  #     if it is true or an error message (String) in other cases.
   #   :label: Description of the command that will be visible in the user interface.
   #   :message: Message to be shown to the user after a successful execution of the command.
   #   :command: Name of the method to be executed if all preconditions are true.
@@ -79,16 +79,22 @@ class Command
       apply(@command, params)
     end
 
-    def apply(method, params)
-      send(method, *params.values_at(*@args))
+    # Apply a precondition to given params. A precondition can be either
+    # a method name or a proc.
+    def apply(pre, params)
+      if pre.is_a?(Proc)
+        pre.call(*params.values_at(*@args))
+      else
+        send(pre, *params.values_at(*@args))
+      end
     end
 
     def preconditions
       @preconditions.map do |pre|
-        if pre.is_a?(Symbol) or pre.is_a?(String)
+        if pre.is_a?(Symbol) or pre.is_a?(String) or pre.is_a?(Proc)
           pre
         else
-          raise ArgumentError.new("precondition should be a symbol")
+          raise ArgumentError.new("precondition should be a symbol, string or a proc")
         end
       end
     end

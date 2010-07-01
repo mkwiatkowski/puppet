@@ -6,19 +6,11 @@ class CityCommands < Command
     capacity = options[:capacity] || 0
     required_money, required_space = options.values_at(:required_money, :required_space)
     if required_money.blank? or required_space.blank?
-      raise ArgumentError, ":required_money and :required_space arguments are mandatory" if required_money.blank? or required_space.blank?
+      raise ArgumentError, ":required_money and :required_space arguments are mandatory"
     end
 
     safe_name = name.sub(/ /, '_')
-    money_method_name = "has_at_least_#{required_money}_money_for_#{safe_name}"
-    space_method_name = "has_at_least_#{required_space}_space_for_#{safe_name}"
     build_method_name = "build_#{safe_name}!"
-    define_method_once(money_method_name) do |city|
-      "Not enough money to build a #{name}" if city.budget < required_money
-    end
-    define_method_once(space_method_name) do |city|
-      "Not enough space to build a #{name}" if city.free_space < required_space
-    end
     define_method_once(build_method_name) do |city|
       city.decrement!(:budget, required_money)
       city.decrement!(:free_space, required_space)
@@ -27,7 +19,7 @@ class CityCommands < Command
 
     define_command "build_#{safe_name}",
       :context => [:city],
-      :pre => [money_method_name, space_method_name],
+      :pre => [required_budget(required_money), required_space(required_space)],
       :command => build_method_name,
       :message => options[:message],
       :label => "build a #{name}"
@@ -44,12 +36,16 @@ class CityCommands < Command
     end
   end
 
-  def has_at_least_1000_money_for_new_space?(city)
-    "Not enough money to buy some new space" if city.budget < 1000
+  def self.required_budget(amount)
+    lambda do |city|
+      "Not enough money" if city.budget < amount
+    end
   end
 
-  def has_at_least_200_money_for_the_festival?(city)
-    "Not enough money to organize the festival" if city.budget < 200
+  def self.required_space(amount)
+    lambda do |city|
+      "Not enough space" if city.free_space < amount
+    end
   end
 
   def buy_space!(city)
@@ -66,14 +62,14 @@ class CityCommands < Command
 
   define_command "buy_space",
     :context => [:city],
-    :pre => [:has_at_least_1000_money_for_new_space?],
+    :pre => [required_budget(1000)],
     :label => "buy new space",
     :message => "Space bought",
     :command => :buy_space!
 
   define_command "organize_festival",
     :context => [:city],
-    :pre => [:has_at_least_200_money_for_the_festival?],
+    :pre => [required_budget(200)],
     :label => "organize a festival",
     :message => "Party time!",
     :command => :organize_festival!

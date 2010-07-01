@@ -41,8 +41,7 @@ describe CityCommands do
     end
 
     it "should not be able to build a house" do
-      lambda { build_medium_house! }.should raise_error(UserActionError,
-        "Not enough money to build a medium house")
+      lambda { build_medium_house! }.should raise_error(UserActionError, "Not enough money")
     end
 
     it "should not lower the budget after trying to build a house" do
@@ -57,8 +56,7 @@ describe CityCommands do
     end
 
     it "should not be able to build a house" do
-      lambda { build_medium_house! }.should raise_error(UserActionError,
-        "Not enough space to build a medium house")
+      lambda { build_medium_house! }.should raise_error(UserActionError, "Not enough space")
     end
 
     it "should not lower the free space after trying to build a house" do
