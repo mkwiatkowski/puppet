@@ -7,6 +7,17 @@ class Command
 
   @@known_commands = {}
 
+  # Define a new user command with the given +name+.
+  # Recognizable options:
+  #   :context: List of parameters that command and each precondition takes.
+  #     Client code is responsible for passing a proper set of parameters
+  #     to handle!
+  #   :pre: List of preconditions' names, which should be methods defined
+  #     on the Command subclass. A precondition should return nil if it
+  #     is true or an error message in other cases.
+  #   :label: Description of the command that will be visible in the user interface.
+  #   :message: Message to be shown to the user after a successful execution of the command.
+  #   :command: Name of the method to be executed if all preconditions are true.
   def self.define_command(name, options)
     @@known_commands[name] = new(name, options)
   end

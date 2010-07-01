@@ -44,6 +44,40 @@ class CityCommands < Command
     end
   end
 
+  def has_at_least_1000_money_for_new_space?(city)
+    "Not enough money to buy some new space" if city.budget < 1000
+  end
+
+  def has_at_least_200_money_for_the_festival?(city)
+    "Not enough money to organize the festival" if city.budget < 200
+  end
+
+  def buy_space!(city)
+    city.transaction do
+      city.increment!(:free_space)
+      city.increment!(:total_space)
+      city.decrement!(:budget, 1000)
+    end
+  end
+
+  def organize_festival!(city)
+    city.decrement!(:budget, 200)
+  end
+
+  define_command "buy_space",
+    :context => [:city],
+    :pre => [:has_at_least_1000_money_for_new_space?],
+    :label => "buy new space",
+    :message => "Space bought",
+    :command => :buy_space!
+
+  define_command "organize_festival",
+    :context => [:city],
+    :pre => [:has_at_least_200_money_for_the_festival?],
+    :label => "organize a festival",
+    :message => "Party time!",
+    :command => :organize_festival!
+
   define_build_command "small house",
     :required_money => 90,
     :required_space => 1,
