@@ -18,6 +18,11 @@ class Command
     returning(self.get(name)) { |command| command.handle!(params) }
   end
 
+  # Method useful for making predicates on the fly.
+  def self.define_method_once(name, &block)
+    send(:define_method, name, &block) unless method_defined?(name)
+  end
+
   def initialize(name, options)
     @name = name
     @args = options[:context] || []
@@ -38,7 +43,7 @@ class Command
 
     def check_preconditions!(params)
       for pre in @preconditions
-        if pre.is_a?(Symbol)
+        if pre.is_a?(Symbol) or pre.is_a?(String)
           val = apply(pre, params)
           raise UserActionError.new(val) unless val.nil?
         else
