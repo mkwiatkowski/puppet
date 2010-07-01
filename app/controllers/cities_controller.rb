@@ -24,7 +24,7 @@ class CitiesController < ApplicationController
 
   def manage
     begin
-      command = Command.handle!(params[:command], :city => @city)
+      command = CityRules.handle!(params[:command], :city => @city)
       flash[:notice] = command.message
     rescue UserActionError => error
       flash[:alert] = error.message

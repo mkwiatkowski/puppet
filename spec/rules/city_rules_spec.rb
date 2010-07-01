@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CityRules do
   def build_house!
-    Command.handle!("build_house", :city => @city)
+    CityRules.handle!("build_house", :city => @city)
   end
 
   def house_building_ignoring_errors

@@ -27,7 +27,8 @@ class CityRules < Command
       :context => [:city],
       :pre => [money_method_name, space_method_name],
       :command => build_method_name,
-      :message => options[:message]
+      :message => options[:message],
+      :label => "build a #{name}"
   end
 
   define_build_command "house",

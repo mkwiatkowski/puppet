@@ -1,26 +1,28 @@
 %h1= @city.name
 
-%p
-  Budget:
-  = @city.budget
+%h3 Information
+%dl
+  %dt Budget
+  %dd= @city.budget
+  %dt Free space
+  %dd
+    = @city.free_space
+    \/
+    = @city.total_space
 
-%p
-  Free space:
-  = @city.free_space
-  \/
-  = @city.total_space
-
-%p
-  Buildings:
+%h3 Buildings
 %ul
   - for building in @city.buildings
     %li= building.name
 
-%p
-  - if @city.free_space.zero?
-    You can't build more houses in this city. There's no space left!
-  - else
-    You can build a house. It costs $200 and occupies one space.
+%h3 Actions
+- for command in CityRules.all
+  - if command.available?(:city => @city)
     = form_tag manage_city_path(@city) do
-      = hidden_field_tag "command", "build_house"
-      = submit_tag "Build now"
+      = hidden_field_tag "command", command.name
+      = submit_tag command.label.capitalize
+  - else
+    = "You can't #{command.label} at the moment."
+    %ul
+      - for reason in command.unavailability_reasons(:city => @city)
+        %li= reason

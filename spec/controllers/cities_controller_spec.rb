@@ -60,7 +60,7 @@ describe CitiesController do
 
         it "should build a house" do
           assign_city(@city)
-          Command.should_receive(:handle!).with("build_house", :city => @city).
+          CityRules.should_receive(:handle!).with("build_house", :city => @city).
             and_return(stub("command", :message => ""))
           post 'manage', @params
         end
