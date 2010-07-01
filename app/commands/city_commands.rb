@@ -36,6 +36,18 @@ class CityCommands < Command
     end
   end
 
+  def self.define_city_command(name, options)
+    define_command(name, options.merge(:context => [:city]))
+  end
+
+  # Define a command with a combination of a money requirement and money
+  # payment.
+  def self.define_investment(name, money, options)
+    pre = options[:pre].to_a + [required_budget(money)]
+    commands = options[:commands].to_a + [pay_money(money)]
+    define_city_command(name, options.merge(:pre => pre, :commands => commands))
+  end
+
   # Define a command that will initiate construction of a building with given
   # +name+. Resources needed for the construction should be passed via
   # :required_money and :required_space parameters.
@@ -47,10 +59,9 @@ class CityCommands < Command
       raise ArgumentError, ":required_money and :required_space arguments are mandatory"
     end
 
-    define_command "build_#{safe_name}",
-      :context => [:city],
-      :pre => [required_budget(required_money), required_space(required_space)],
-      :commands => [pay_money(required_money), occupy_space(required_space), construct_building(name, capacity)],
+    define_investment "build_#{safe_name}", required_money,
+      :pre => [required_space(required_space)],
+      :commands => [occupy_space(required_space), construct_building(name, capacity)],
       :message => options[:message],
       :label => "build a #{name}"
   end
@@ -66,19 +77,14 @@ class CityCommands < Command
     end
   end
 
-  define_command "buy_space",
-    :context => [:city],
-    :pre => [required_budget(1000)],
+  define_investment "buy_space", 1000,
     :label => "buy new space",
     :message => "Space bought",
-    :commands => [pay_money(1000), increase_space(1)]
+    :commands => [increase_space(1)]
 
-  define_command "organize_festival",
-    :context => [:city],
-    :pre => [required_budget(200)],
+  define_investment "organize_festival", 200,
     :label => "organize a festival",
-    :message => "Party time!",
-    :commands => [pay_money(200)]
+    :message => "Party time!"
 
   define_build_command "small house",
     :required_money => 90,
