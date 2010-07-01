@@ -18,11 +18,6 @@ class Command
     returning(self.get(name)) { |command| command.handle!(params) }
   end
 
-  # Method useful for making predicates on the fly.
-  def self.define_method_once(name, &block)
-    send(:define_method, name, &block) unless method_defined?(name)
-  end
-
   def initialize(name, options)
     @name = name
     @args = options[:context] || []
@@ -37,6 +32,11 @@ class Command
   end
 
   private
+    # Method useful for making predicates on the fly.
+    def self.define_method_once(name, &block)
+      send(:define_method, name, &block) unless method_defined?(name)
+    end
+
     def self.get(name)
       @@known_commands[name] or raise UserActionError.new("Unknown action")
     end
