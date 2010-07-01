@@ -22,5 +22,9 @@ describe City do
     it "should have a budget of 1000" do
       @city.budget.should == 1000
     end
+
+    it "should have a population of 0" do
+      @city.population.should == 0
+    end
   end
 end

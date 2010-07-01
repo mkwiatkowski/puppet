@@ -13,5 +13,6 @@ class City < ActiveRecord::Base
     self.total_space = 9 unless self.total_space
     self.free_space = 9 unless self.free_space
     self.budget = 1000 unless self.budget
+    self.population = 0 unless self.population
   end
 end
