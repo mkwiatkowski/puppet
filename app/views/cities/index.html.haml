@@ -1,18 +1,22 @@
 %h1 Your cities
 
-%table
-  %tr
-    %th Name
-    %th Budget
-    %th Population
-    %th Space
-    %th Action
-  - for city in @cities
+- if @cities.empty?
+  %p
+    This is a game about building a city. Please use the link below to create your first city.
+- else
+  %table
     %tr
-      %td= city.name
-      %td= city.budget
-      %td= city_population_summary(city)
-      %td= city_space_summary(city)
-      %td= link_to "Visit", city_path(city)
+      %th Name
+      %th Budget
+      %th Population
+      %th Space
+      %th Action
+    - for city in @cities
+      %tr
+        %td= city.name
+        %td= city.budget
+        %td= city_population_summary(city)
+        %td= city_space_summary(city)
+        %td= link_to "Visit", city_path(city)
 
 %p= link_to "Create new city", new_city_path
