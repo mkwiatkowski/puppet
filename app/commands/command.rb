@@ -9,15 +9,17 @@ class Command
 
   # Define a new user command with the given +name+.
   # Recognizable options:
-  #   :context: List of parameters that command and each precondition takes.
-  #     Client code is responsible for passing a proper set of parameters
-  #     to handle!
+  #   :context: List of parameters that each of command callbacks and each
+  #     precondition takes. Client code is responsible for passing a proper
+  #     set of parameters to handle!
   #   :pre: List of preconditions. Precondition may either be a name of
   #     a method defined on the Command subclass or a Proc. A precondition
   #     should return nil if it is true or an error message (String) in
   #     other cases.
-  #   :label: Description of the command that will be visible in the user interface.
-  #   :message: Message to be shown to the user after a successful execution of the command.
+  #   :label: Description of the command that will be visible in the user
+  #     interface.
+  #   :message: Message to be shown to the user after a successful execution
+  #     of the command.
   #   :commands: List of commands to be executed if all preconditions are true.
   #     Each command may either be a method name or a Proc.
   def self.define_command(name, options)
@@ -61,11 +63,6 @@ class Command
   end
 
   private
-    # Method useful for making predicates on the fly.
-    def self.define_method_once(name, &block)
-      send(:define_method, name, &block) unless method_defined?(name)
-    end
-
     def self.get(name)
       @@known_commands[name] or raise UserActionError.new("Unknown action")
     end
