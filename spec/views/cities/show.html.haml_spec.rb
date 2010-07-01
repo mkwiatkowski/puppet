@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe "cities/show.html.haml" do
+  before do
+    view.stub!(:city_population_summary)
+    view.stub!(:city_space_summary)
+  end
+
   it "should show city name" do
     assign(:city, Factory.stub(:city, :name => "CITY_NAME"))
     render

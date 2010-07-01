@@ -27,4 +27,11 @@ describe City do
       @city.population.should == 0
     end
   end
+
+  it "should never rise population over total capacity" do
+    city = Factory(:city, :buildings => [Factory(:building, :capacity => 10)])
+    city.total_capacity.should == 10
+    city.update_attribute(:population, 20)
+    city.population.should == 10
+  end
 end

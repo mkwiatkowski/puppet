@@ -2,15 +2,12 @@
 
 %h3 Information
 %dl
-  %dt Population
-  %dd= @city.population
+  %dt Population / capacity
+  %dd= city_population_summary(@city)
   %dt Budget
   %dd= @city.budget
-  %dt Free space
-  %dd
-    = @city.free_space
-    \/
-    = @city.total_space
+  %dt Free space / total space
+  %dd= city_space_summary(@city)
 
 %h3 Buildings
 %ul

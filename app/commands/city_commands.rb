@@ -3,6 +3,7 @@ class CityCommands < Command
   # +name+. Resources needed for the construction should be passed via
   # :required_money and :required_space parameters.
   def self.define_build_command(name, options)
+    capacity = options[:capacity] || 0
     required_money, required_space = options.values_at(:required_money, :required_space)
     if required_money.blank? or required_space.blank?
       raise ArgumentError, ":required_money and :required_space arguments are mandatory" if required_money.blank? or required_space.blank?
@@ -20,7 +21,7 @@ class CityCommands < Command
     define_method_once(build_method_name) do |city|
       city.decrement!(:budget, required_money)
       city.decrement!(:free_space, required_space)
-      city.buildings.create(:name => name)
+      city.buildings.create(:name => name, :capacity => capacity)
     end
 
     define_command "build_#{name}",
@@ -31,8 +32,19 @@ class CityCommands < Command
       :label => "build a #{name}"
   end
 
+  # Progress game by a single step. Should be called by cron in regular
+  # time intervals.
+  def self.tick!
+    City.all.each do |city|
+      unless city.is_full?
+        city.increment!(:population)
+      end
+    end
+  end
+
   define_build_command "house",
     :required_money => 200,
     :required_space => 1,
+    :capacity => 15,
     :message => "House built"
 end

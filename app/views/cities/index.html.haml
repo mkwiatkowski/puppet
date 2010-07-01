@@ -4,12 +4,14 @@
   %tr
     %th Name
     %th Budget
-    %th Space (free)
+    %th Population
+    %th Space
     %th Action
   - for city in @cities
     %tr
       %td= city.name
       %td= city.budget
+      %td= city_population_summary(city)
       %td= city_space_summary(city)
       %td= link_to "Visit", city_path(city)
 
