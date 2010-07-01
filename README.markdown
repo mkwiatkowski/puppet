@@ -6,7 +6,7 @@ A prototype of a solution to the problem of expressing social game rules in code
 
 You need git, ruby1.8, rubygems, sqlite and bundler. Once you have that do:
 
-    git clone http://github.com/infrared/puppet
+    git clone git://github.com/infrared/puppet.git
     cd puppet
     bundle install
     rake db:migrate
