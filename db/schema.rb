@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100629175856) do
+ActiveRecord::Schema.define(:version => 20100701085620) do
+
+  create_table "buildings", :force => true do |t|
+    t.string   "name",       :null => false
+    t.integer  "city_id",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cities", :force => true do |t|
     t.integer  "owner_id",    :null => false

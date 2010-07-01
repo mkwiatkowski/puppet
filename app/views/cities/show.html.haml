@@ -11,6 +11,12 @@
   = @city.total_space
 
 %p
+  Buildings:
+%ul
+  - for building in @city.buildings
+    %li= building.name
+
+%p
   - if @city.free_space.zero?
     You can't build more houses in this city. There's no space left!
   - else

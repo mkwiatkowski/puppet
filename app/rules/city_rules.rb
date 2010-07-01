@@ -20,6 +20,7 @@ class CityRules < Command
     define_method_once(build_method_name) do |city|
       city.decrement!(:budget, required_money)
       city.decrement!(:free_space, required_space)
+      city.buildings.create(:name => name)
     end
 
     define_command "build_#{name}",

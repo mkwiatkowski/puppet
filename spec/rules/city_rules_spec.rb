@@ -65,4 +65,14 @@ describe CityRules do
       house_building_ignoring_errors.should_not change(@city, :free_space)
     end
   end
+
+  describe "build_house command" do
+    it "should create a new building with a name 'house' in the city" do
+      @city = Factory(:city)
+      lambda {
+        build_house!
+      }.should change(@city.buildings, :size).from(0).to(1)
+      @city.buildings.first.name.should == 'house'
+    end
+  end
 end

@@ -1,5 +1,6 @@
 class City < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
+  has_many :buildings
 
   attr_accessible :name
 
