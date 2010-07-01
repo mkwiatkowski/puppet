@@ -48,9 +48,9 @@ describe CitiesController do
         end
       end
 
-      describe "with build_house command" do
+      describe "with build_medium_house command" do
         before do
-          @params = {:id => @city.id, :command => "build_house"}
+          @params = {:id => @city.id, :command => "build_medium_house"}
         end
 
         it "should redirect to city page" do
@@ -60,7 +60,7 @@ describe CitiesController do
 
         it "should build a house" do
           assign_city(@city)
-          CityCommands.should_receive(:handle!).with("build_house", :city => @city).
+          CityCommands.should_receive(:handle!).with("build_medium_house", :city => @city).
             and_return(stub("command", :message => ""))
           post 'manage', @params
         end

@@ -9,9 +9,10 @@ class CityCommands < Command
       raise ArgumentError, ":required_money and :required_space arguments are mandatory" if required_money.blank? or required_space.blank?
     end
 
-    money_method_name = "has_at_least_#{required_money}_money"
-    space_method_name = "has_at_least_#{required_space}_space"
-    build_method_name = "build_#{name}!"
+    safe_name = name.sub(/ /, '_')
+    money_method_name = "has_at_least_#{required_money}_money_for_#{safe_name}"
+    space_method_name = "has_at_least_#{required_space}_space_for_#{safe_name}"
+    build_method_name = "build_#{safe_name}!"
     define_method_once(money_method_name) do |city|
       "Not enough money to build a #{name}" if city.budget < required_money
     end
@@ -24,7 +25,7 @@ class CityCommands < Command
       city.buildings.create(:name => name, :capacity => capacity)
     end
 
-    define_command "build_#{name}",
+    define_command "build_#{safe_name}",
       :context => [:city],
       :pre => [money_method_name, space_method_name],
       :command => build_method_name,
@@ -42,9 +43,21 @@ class CityCommands < Command
     end
   end
 
-  define_build_command "house",
+  define_build_command "small house",
+    :required_money => 90,
+    :required_space => 1,
+    :capacity => 6,
+    :message => "House built"
+
+  define_build_command "medium house",
     :required_money => 200,
     :required_space => 1,
     :capacity => 15,
+    :message => "House built"
+
+  define_build_command "big house",
+    :required_money => 450,
+    :required_space => 2,
+    :capacity => 36,
     :message => "House built"
 end
